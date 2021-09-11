@@ -26,7 +26,7 @@ func (a Array2D) Get(x, y int) (interface{}, error) {
 		return nil, err
 	}
 
-	return a.elements[y * a.Width() + x], nil
+	return a.elements[y*a.Width()+x], nil
 }
 
 func (a *Array2D) Set(x, y int, value interface{}) error {
@@ -34,7 +34,7 @@ func (a *Array2D) Set(x, y int, value interface{}) error {
 		return err
 	}
 
-	a.elements[y * a.Width() + x] = value
+	a.elements[y*a.Width()+x] = value
 
 	return nil
 }

@@ -27,7 +27,7 @@ func TestNewArray2D(t *testing.T) {
 
 	assert.NoError(t, err)
 	// NOTE (c.nicola): first element has the value 0, last element has the value x * a.Width() + y (=> 200 * 200)
-	assert.Equal(t, 100 * a.Width() + 100, v.(int))
+	assert.Equal(t, 100*a.Width()+100, v.(int))
 
 	// NOTE (c.nicola): get an element out of bounds
 	_, err = a.Get(500, 100)
@@ -48,7 +48,7 @@ func TestNewArray2D(t *testing.T) {
 	assert.Error(t, err)
 
 	// NOTE (c.nicola): access the last element, zero based index
-	v, err = a.Get(width - 1, height - 1)
+	v, err = a.Get(width-1, height-1)
 	assert.NoError(t, err)
-	assert.Equal(t, width * height - 1, v.(int))
+	assert.Equal(t, width*height-1, v.(int))
 }
