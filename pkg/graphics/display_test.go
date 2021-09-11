@@ -13,8 +13,10 @@ func TestNewDisplay(t *testing.T) {
 
 	var frameBuffer [width][height]graphics.Glyph
 
-	drawFn := func(x, y int, glyph graphics.Glyph) {
+	drawFn := func(x, y int, glyph graphics.Glyph) error {
 		frameBuffer[x][y] = glyph
+
+		return nil
 	}
 
 	// NOTE (c.nicola): draw stuff to the display

@@ -9,7 +9,7 @@ type (
 		glyphs, changedGlyphs primitives.Array2D
 	}
 
-	DrawGlyphFn = func(x, y int, g Glyph)
+	DrawGlyphFn = func(x, y int, g Glyph) error
 )
 
 func NewDisplay(width, height int) Display {
@@ -69,7 +69,9 @@ func (d *Display) Render(fn DrawGlyphFn) error {
 				return ErrDisplayInvalidGlyph
 			}
 
-			fn(x, y, changedGlyph)
+			if err = fn(x, y, changedGlyph); err != nil {
+				return err
+			}
 
 			if err = d.glyphs.Set(x, y, changedGlyph); err != nil {
 				return err

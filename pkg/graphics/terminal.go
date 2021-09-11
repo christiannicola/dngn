@@ -2,50 +2,57 @@ package graphics
 
 type (
 	Terminal struct {
-		width, height int
-		writer        GlyphWriter
-		bg, fg        Color
-	}
-
-	GlyphWriter interface {
-		WriteGlyph(x, y int, g Glyph)
+		display Display
+		bg, fg  Color
 	}
 )
 
-func NewTerminal(width, height int, writer GlyphWriter) Terminal {
-	return Terminal{width, height, writer, Black, White}
+func NewTerminal(width, height int) Terminal {
+	return Terminal{NewDisplay(width, height), Black, White}
 }
 
 func (t Terminal) Width() int {
-	return t.width
+	return t.display.Width()
 }
 
 func (t Terminal) Height() int {
-	return t.height
+	return t.display.Height()
 }
 
-func (t *Terminal) Fill(x, y, width, height int, color Color) {
+func (t *Terminal) Fill(x, y, width, height int, color Color) error {
 	glyph := NewGlyphFromCharCode(Space, t.fg, color)
 
 	for iy := y; iy < y+height; iy++ {
 		for ix := x; ix < x+width; ix++ {
-			t.writer.WriteGlyph(ix, iy, glyph)
+			if err := t.display.SetGlyph(ix, iy, glyph); err != nil {
+				return err
+			}
 		}
 	}
+
+	return nil
 }
 
-func (t *Terminal) WriteChar(x, y int, c CharCode, fg, bg Color) {
-	t.writer.WriteGlyph(x, y, Glyph{c, fg, bg})
+func (t *Terminal) WriteChar(x, y int, c CharCode, fg, bg Color) error {
+	return t.display.SetGlyph(x, y, Glyph{c, fg, bg})
 }
 
-func (t *Terminal) WriteString(x, y int, text string, fg, bg Color) {
+func (t *Terminal) WriteString(x, y int, text string, fg, bg Color) error {
 	runes := []rune(text)
 
 	for i := range runes {
-		if x+i >= t.width {
+		if x+i >= t.Width() {
 			break
 		}
 
-		t.writer.WriteGlyph(x+i, y, NewGlyphFromRune(runes[i], fg, bg))
+		if err := t.display.SetGlyph(x+i, y, NewGlyphFromRune(runes[i], fg, bg)); err != nil {
+			return err
+		}
 	}
+
+	return nil
+}
+
+func (t *Terminal) Render(fn DrawGlyphFn) error {
+	return t.display.Render(fn)
 }

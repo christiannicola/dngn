@@ -80,3 +80,15 @@ func (c Color) BlendPercent(other Color, percent int) Color {
 func (c Color) Equal(other Color) bool {
 	return c.r == other.r && c.g == other.g && c.b == other.b
 }
+
+func (c Color) R() int {
+	return c.r
+}
+
+func (c Color) G() int {
+	return c.g
+}
+
+func (c Color) B() int {
+	return c.b
+}
