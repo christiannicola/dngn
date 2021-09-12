@@ -7,8 +7,8 @@ type (
 	}
 )
 
-func NewTerminal(width, height int) Terminal {
-	return Terminal{NewDisplay(width, height), Black, White}
+func NewTerminal(width, height int) *Terminal {
+	return &Terminal{NewDisplay(width, height), Black, White}
 }
 
 func (t Terminal) Width() int {

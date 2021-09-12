@@ -17,7 +17,7 @@ M = $(shell printf "\033[34;1m▶\033[0m")
 export GO111MODULE=on
 
 .PHONY: all
-all: fmt lint | $(BIN) ; $(info $(M) building release...) @ ## Build release binary
+all: fmt | $(BIN) ; $(info $(M) building release...) @ ## Build release binary
 	$Q CGO_ENABLED=1 CC=gcc GOOS=linux GOARCH=amd64 \
 		$(GO) build \
 		-ldflags '-X main.Version=$(VERSION) -X main.BuildDate=$(DATE) -s -w' \
@@ -55,7 +55,7 @@ test-verbose: ARGS=-v            ## Run tests in verbose mode with coverage repo
 test-race:    ARGS=-race         ## Run tests with race detector
 $(TEST_TARGETS): NAME=$(MAKECMDGOALS:test-%=%)
 $(TEST_TARGETS): test
-check test tests: fmt lint ; $(info $(M) running $(NAME:%=% )tests…) @ ## Run tests
+check test tests: fmt ; $(info $(M) running $(NAME:%=% )tests…) @ ## Run tests
 	$Q $(GO) test -timeout $(TIMEOUT)s $(ARGS) $(TESTPKGS)
 
 test-xml: fmt lint | $(GO2XUNIT) ; $(info $(M) running xUnit tests…) @ ## Run tests with xUnit output
