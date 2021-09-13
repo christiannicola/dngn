@@ -8,7 +8,7 @@ import (
 
 const (
 	glyphWidth  = 16
-	glyphHeight = 16
+	glyphHeight = 32
 )
 
 type Screen struct {
@@ -37,7 +37,7 @@ func NewScreen(width, height int32, title string) (*Screen, error) {
 		return nil, err
 	}
 
-	if screen.Renderer, err = sdl.CreateRenderer(screen.Window, -1, sdl.RENDERER_ACCELERATED); err != nil {
+	if screen.Renderer, err = sdl.CreateRenderer(screen.Window, -1, sdl.RENDERER_ACCELERATED|sdl.RENDERER_PRESENTVSYNC); err != nil {
 		return nil, err
 	}
 

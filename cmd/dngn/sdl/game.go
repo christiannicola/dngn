@@ -2,7 +2,7 @@ package sdl
 
 import (
 	"github.com/christiannicola/dngn/pkg/graphics"
-	"github.com/christiannicola/dngn/pkg/primitives"
+	"github.com/christiannicola/dngn/pkg/ui"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -25,11 +25,12 @@ func NewGame(width, height, fps int32, title string) (*Game, error) {
 }
 
 func (g *Game) HandleEvents() error {
-	event := sdl.PollEvent()
-
-	switch event.(type) {
-	case *sdl.QuitEvent:
-		g.IsRunning = false
+	var event sdl.Event
+	for event = sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
+		switch event.(type) {
+		case *sdl.QuitEvent:
+			g.IsRunning = false
+		}
 	}
 
 	return nil
@@ -45,61 +46,38 @@ func (g *Game) Update() error {
 
 	for y := 0; y < g.screen.Terminal.Height(); y++ {
 		for x := 0; x < g.screen.Terminal.Width(); x++ {
-			if err := g.screen.Terminal.WriteChar(x, y, graphics.MediumShade, graphics.DarkGray, graphics.DarkRed); err != nil {
+			if err := g.screen.Terminal.WriteChar(x, y, graphics.MediumShade, graphics.DarkerWarmGray, graphics.Black); err != nil {
 				panic(err)
 			}
 		}
 	}
 
-	box := primitives.NewRect(0, 0, g.screen.Terminal.Width()/2, g.screen.Terminal.Height()/2)
+	logo := graphics.NewText(ui.Logo, graphics.Buttermilk, graphics.DarkWarmGray)
+	start := graphics.NewText("   New Game   ", graphics.Buttermilk, graphics.DarkWarmGray)
+	load := graphics.NewText("   Load Game  ", graphics.Buttermilk, graphics.DarkWarmGray)
+	quit := graphics.NewText("     Quit     ", graphics.Buttermilk, graphics.DarkWarmGray)
+	copyright := graphics.NewText("2021 c Christian Nicola", graphics.Buttermilk, graphics.DarkWarmGray)
 
-	g.screen.Terminal.Fill(box.X(), box.Y(), box.Width(), box.Height(), graphics.DarkBrown)
+	logo.SetPos(graphics.TopCentered, 0, 3, g.screen.Terminal.Width(), g.screen.Terminal.Height())
+	start.SetPos(graphics.Centered, 0, 0, g.screen.Terminal.Width(), g.screen.Terminal.Height())
+	load.SetPos(graphics.Centered, 0, 3, g.screen.Terminal.Width(), g.screen.Terminal.Height())
+	quit.SetPos(graphics.Centered, 0, 6, g.screen.Terminal.Width(), g.screen.Terminal.Height())
+	copyright.SetPos(graphics.BottomLeft, 0, 0, g.screen.Terminal.Width(), g.screen.Terminal.Height())
 
-	t := "dngn\nis great"
-	text := graphics.NewText(t, graphics.LightGray, graphics.Black)
-
-	text.SetPos(graphics.TopLeft, box.X(), box.Y(), box.Width(), box.Height())
-	if err := g.screen.Terminal.WriteText(text); err != nil {
+	if err := g.screen.Terminal.WriteText(start); err != nil {
+		return err
+	}
+	if err := g.screen.Terminal.WriteText(load); err != nil {
+		return err
+	}
+	if err := g.screen.Terminal.WriteText(quit); err != nil {
 		return err
 	}
 
-	text.SetPos(graphics.TopCentered, box.X(), box.Y(), box.Width(), box.Height())
-	if err := g.screen.Terminal.WriteText(text); err != nil {
+	if err := g.screen.Terminal.WriteText(copyright); err != nil {
 		return err
 	}
-
-	text.SetPos(graphics.TopRight, box.X(), box.Y(), box.Width(), box.Height())
-	if err := g.screen.Terminal.WriteText(text); err != nil {
-		return err
-	}
-
-	text.SetPos(graphics.LeftCentered, box.X(), box.Y(), box.Width(), box.Height())
-	if err := g.screen.Terminal.WriteText(text); err != nil {
-		return err
-	}
-
-	text.SetPos(graphics.Centered, box.X(), box.Y(), box.Width(), box.Height())
-	if err := g.screen.Terminal.WriteText(text); err != nil {
-		return err
-	}
-
-	text.SetPos(graphics.RightCentered, box.X(), box.Y(), box.Width(), box.Height())
-	if err := g.screen.Terminal.WriteText(text); err != nil {
-		return err
-	}
-
-	text.SetPos(graphics.BottomLeft, box.X(), box.Y(), box.Width(), box.Height())
-	if err := g.screen.Terminal.WriteText(text); err != nil {
-		return err
-	}
-
-	text.SetPos(graphics.BottomCentered, box.X(), box.Y(), box.Width(), box.Height())
-	if err := g.screen.Terminal.WriteText(text); err != nil {
-		return err
-	}
-
-	text.SetPos(graphics.BottomRight, box.X(), box.Y(), box.Width(), box.Height())
-	return g.screen.Terminal.WriteText(text)
+	return g.screen.Terminal.WriteText(logo)
 }
 
 func (g *Game) Draw() error {
