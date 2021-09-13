@@ -1,5 +1,7 @@
 package graphics
 
+import "github.com/christiannicola/dngn/pkg/primitives"
+
 type (
 	Terminal struct {
 		display Display
@@ -17,6 +19,10 @@ func (t Terminal) Width() int {
 
 func (t Terminal) Height() int {
 	return t.display.Height()
+}
+
+func (t Terminal) Size() primitives.Vector {
+	return t.display.Size()
 }
 
 func (t *Terminal) Fill(x, y, width, height int, color Color) error {
@@ -47,6 +53,23 @@ func (t *Terminal) WriteString(x, y int, text string, fg, bg Color) error {
 
 		if err := t.display.SetGlyph(x+i, y, NewGlyphFromRune(runes[i], fg, bg)); err != nil {
 			return err
+		}
+	}
+
+	return nil
+}
+
+func (t *Terminal) WriteText(text *Text) error {
+	for iy := text.y; iy < text.Size().Y()+text.y; iy++ {
+		for ix := text.x; ix < text.Size().X()+text.x; ix++ {
+			gl, err := text.glyphs.Get(ix-text.x, iy-text.y)
+			if err != nil {
+				return err
+			}
+
+			if err := t.display.SetGlyph(ix, iy, gl.(Glyph)); err != nil {
+				return err
+			}
 		}
 	}
 

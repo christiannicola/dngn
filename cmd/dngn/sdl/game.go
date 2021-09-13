@@ -2,27 +2,22 @@ package sdl
 
 import (
 	"github.com/christiannicola/dngn/pkg/graphics"
+	"github.com/christiannicola/dngn/pkg/primitives"
 	"github.com/veandco/go-sdl2/sdl"
-	"math/rand"
-	"time"
 )
 
 type Game struct {
-	counter int
-	terminal                               *Terminal
-	IsRunning                              bool
-}
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
+	counter   int
+	screen    *Screen
+	IsRunning bool
 }
 
 func NewGame(width, height, fps int32, title string) (*Game, error) {
 	var err error
 
-	g := &Game{0,nil, true}
+	g := &Game{0, nil, true}
 
-	if g.terminal, err = NewTerminal(width, height, title); err != nil {
+	if g.screen, err = NewScreen(width, height, title); err != nil {
 		return nil, err
 	}
 
@@ -43,62 +38,80 @@ func (g *Game) HandleEvents() error {
 func (g *Game) Update() error {
 	g.counter++
 
-	// NOTE (c.nicola): The game is running at 60 ticks a second, and we only update once every second
-	if g.counter%60 != 0 {
+	// NOTE (c.nicola): The game is running at 25 ticks a second
+	if g.counter%(60/25) != 0 {
 		return nil
 	}
 
-	for y := 0; y < g.terminal.Internal.Height(); y++ {
-		for x := 0; x < g.terminal.Internal.Width(); x++ {
-			var fg, bg graphics.Color
-
-			switch 0 /*rand.Intn(0x7f) % 10*/ {
-			case 0:
-				fallthrough
-			case 9:
-				fg = graphics.Red
-				bg = graphics.DarkRed
-			case 1:
-				fallthrough
-			case 8:
-				fg = graphics.Blue
-				bg = graphics.DarkBlue
-			case 2:
-				fallthrough
-			case 7:
-				fg = graphics.Yellow
-				bg = graphics.DarkYellow
-			case 3:
-				fallthrough
-			case 6:
-				fg = graphics.Gold
-				bg = graphics.DarkGold
-			case 4:
-				fallthrough
-			case 5:
-				fg = graphics.Green
-				bg = graphics.DarkGreen
-			}
-
-			if err := g.terminal.Internal.WriteChar(x, y, graphics.MediumShade, fg, bg); err != nil {
+	for y := 0; y < g.screen.Terminal.Height(); y++ {
+		for x := 0; x < g.screen.Terminal.Width(); x++ {
+			if err := g.screen.Terminal.WriteChar(x, y, graphics.MediumShade, graphics.DarkGray, graphics.DarkRed); err != nil {
 				panic(err)
 			}
 		}
 	}
 
-	return nil
-}
+	box := primitives.NewRect(0, 0, g.screen.Terminal.Width()/2, g.screen.Terminal.Height()/2)
 
-func (g *Game) Draw() error {
-	if err := g.terminal.Internal.Render(g.terminal.DrawGlyph); err != nil {
+	g.screen.Terminal.Fill(box.X(), box.Y(), box.Width(), box.Height(), graphics.DarkBrown)
+
+	t := "dngn\nis great"
+	text := graphics.NewText(t, graphics.LightGray, graphics.Black)
+
+	text.SetPos(graphics.TopLeft, box.X(), box.Y(), box.Width(), box.Height())
+	if err := g.screen.Terminal.WriteText(text); err != nil {
 		return err
 	}
 
-	g.terminal.Renderer.Present()
+	text.SetPos(graphics.TopCentered, box.X(), box.Y(), box.Width(), box.Height())
+	if err := g.screen.Terminal.WriteText(text); err != nil {
+		return err
+	}
+
+	text.SetPos(graphics.TopRight, box.X(), box.Y(), box.Width(), box.Height())
+	if err := g.screen.Terminal.WriteText(text); err != nil {
+		return err
+	}
+
+	text.SetPos(graphics.LeftCentered, box.X(), box.Y(), box.Width(), box.Height())
+	if err := g.screen.Terminal.WriteText(text); err != nil {
+		return err
+	}
+
+	text.SetPos(graphics.Centered, box.X(), box.Y(), box.Width(), box.Height())
+	if err := g.screen.Terminal.WriteText(text); err != nil {
+		return err
+	}
+
+	text.SetPos(graphics.RightCentered, box.X(), box.Y(), box.Width(), box.Height())
+	if err := g.screen.Terminal.WriteText(text); err != nil {
+		return err
+	}
+
+	text.SetPos(graphics.BottomLeft, box.X(), box.Y(), box.Width(), box.Height())
+	if err := g.screen.Terminal.WriteText(text); err != nil {
+		return err
+	}
+
+	text.SetPos(graphics.BottomCentered, box.X(), box.Y(), box.Width(), box.Height())
+	if err := g.screen.Terminal.WriteText(text); err != nil {
+		return err
+	}
+
+	text.SetPos(graphics.BottomRight, box.X(), box.Y(), box.Width(), box.Height())
+	return g.screen.Terminal.WriteText(text)
+}
+
+func (g *Game) Draw() error {
+	if err := g.screen.Terminal.Render(g.screen.DrawGlyph); err != nil {
+		return err
+	}
+
+	g.screen.Renderer.Present()
 
 	return nil
 }
 
 func (g *Game) Shutdown() error {
-	return g.terminal.Close()
+	return g.screen.Close()
 }

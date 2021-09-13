@@ -63,7 +63,7 @@ func (r Rect) Right() int {
 }
 
 func (r Rect) Bottom() int {
-	return int(builtin.Min(float64(r.Y()), float64(r.Y()+r.Height())))
+	return int(builtin.Max(float64(r.Y()), float64(r.Y()+r.Height())))
 }
 
 func (r Rect) TopLeft() Vector {

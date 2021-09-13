@@ -1,6 +1,9 @@
 package graphics
 
-import "github.com/christiannicola/dngn/pkg/math"
+import (
+	"github.com/christiannicola/dngn/pkg/math"
+	"image/color"
+)
 
 var (
 	Black = Color{0, 0, 0}
@@ -91,4 +94,8 @@ func (c Color) G() int {
 
 func (c Color) B() int {
 	return c.b
+}
+
+func (c Color) RGBA() color.RGBA {
+	return color.RGBA{R: uint8(c.R()), G: uint8(c.G()), B: uint8(c.B()), A: 0}
 }

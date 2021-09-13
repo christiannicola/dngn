@@ -15,7 +15,7 @@ var (
 )
 
 func main() {
-	const width, height, fps = 100, 40, 60
+	const width, height, fps = 6 * 16, 6 * 9, 60
 	const frameDelay = 1000 / fps
 
 	flag.Parse()
@@ -55,13 +55,12 @@ func main() {
 			panic(err)
 		}
 
-		frameTime = int32(sdl.GetTicks()) - frameStart + 1
+		frameTime = int32(sdl.GetTicks()) - frameStart
 
 		if frameDelay > frameTime {
 			sdl.Delay(uint32(frameDelay - frameTime))
 		}
-
-		println(1000 / (int32(sdl.GetTicks()) - frameStart))
+		// println(1000 / (int32(sdl.GetTicks()) - frameStart))
 	}
 
 	if *memoryProfile == true {

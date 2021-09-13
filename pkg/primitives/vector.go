@@ -7,6 +7,10 @@ type Vector struct {
 	y int
 }
 
+func NewVector(x, y int) Vector {
+	return Vector{x, y}
+}
+
 func (v Vector) X() int {
 	return v.x
 }
