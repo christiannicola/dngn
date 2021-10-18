@@ -48,8 +48,24 @@ func NewScreen(width, height int32, title string) (*Screen, error) {
 	return &screen, nil
 }
 
-func (s *Screen) generateGlyphTexture(g graphics.Glyph) (*sdl.Texture, error) {
-	surface, err := s.Font.RenderGlyphShaded(g.Rune(), sdl.Color(g.ForeGroundColor().RGBA()), sdl.Color(g.BackgroundColor().RGBA()))
+func (s *Screen) generateGlyphTexture(glyph graphics.Glyph) (*sdl.Texture, error) {
+	fg, bg := sdl.Color{}, sdl.Color{}
+
+	r, g, b, a := glyph.ForeGroundColor().RGBA()
+
+	fg.R = uint8(r)
+	fg.G = uint8(g)
+	fg.B = uint8(b)
+	fg.A = uint8(a)
+
+	r, g, b, a = glyph.BackgroundColor().RGBA()
+
+	bg.R = uint8(r)
+	bg.G = uint8(g)
+	bg.B = uint8(b)
+	bg.A = uint8(a)
+
+	surface, err := s.Font.RenderGlyphShaded(glyph.Rune(), fg, bg)
 	if err != nil {
 		return nil, err
 	}

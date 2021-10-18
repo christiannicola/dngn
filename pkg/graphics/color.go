@@ -2,7 +2,6 @@ package graphics
 
 import (
 	"github.com/christiannicola/dngn/pkg/math"
-	"image/color"
 )
 
 var (
@@ -129,6 +128,6 @@ func (c Color) B() int {
 	return c.b
 }
 
-func (c Color) RGBA() color.RGBA {
-	return color.RGBA{R: uint8(c.R()), G: uint8(c.G()), B: uint8(c.B()), A: 0}
+func (c Color) RGBA() (r, g, b, a uint32) {
+	return uint32(c.R()), uint32(c.G()), uint32(c.B()), 0
 }
