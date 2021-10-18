@@ -2,6 +2,7 @@ package graphics
 
 import (
 	"github.com/christiannicola/dngn/pkg/primitives"
+	"golang.org/x/image/font"
 )
 
 type (
@@ -52,7 +53,7 @@ func (d *Display) SetGlyph(x, y int, glyph Glyph) error {
 	return d.changedGlyphs.Set(x, y, nil)
 }
 
-func (d *Display) Render(fn DrawGlyphFn) error {
+func (d *Display) Render(surface Surface, face font.Face) error {
 	for y := 0; y < d.Height(); y++ {
 		for x := 0; x < d.Width(); x++ {
 			changed, err := d.changedGlyphs.Get(x, y)
@@ -69,9 +70,16 @@ func (d *Display) Render(fn DrawGlyphFn) error {
 				return ErrDisplayInvalidGlyph
 			}
 
-			if err = fn(x, y, changedGlyph); err != nil {
-				return err
-			}
+			var target Surface
+
+			target = surface.Renderer().NewSurface(16, 32)
+
+			target.Clear(Gold)
+			target.DrawGlyph(x, y, changedGlyph.Rune(), face, changedGlyph.ForeGroundColor())
+
+			surface.PushTranslation(x, y)
+			surface.Render(target)
+			surface.Pop()
 
 			if err = d.glyphs.Set(x, y, changedGlyph); err != nil {
 				return err

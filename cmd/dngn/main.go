@@ -2,7 +2,8 @@ package main
 
 import (
 	"flag"
-	internal "github.com/christiannicola/dngn/cmd/dngn/sdl"
+	internal "github.com/christiannicola/dngn/cmd/dngn/ebiten"
+	"github.com/christiannicola/dngn/pkg/debug"
 	"os"
 	"runtime/pprof"
 )
@@ -13,8 +14,7 @@ var (
 )
 
 func main() {
-	const width, height, fps = 100, 30, 60
-	const frameDelay = 1000 / fps
+	const width, height = 100, 30
 
 	flag.Parse()
 
@@ -31,23 +31,19 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	game, err := internal.NewGame(width, height, fps, "dngn")
+	l := debug.NewLogger(nil)
+	l.SetPrefix("MAIN")
+	l.SetLevel(debug.LogLevelDebug)
+
+	l.Debug("constructing game")
+
+	game, err := internal.NewGame(width, height, "dngn")
 	if err != nil {
 		panic(err)
 	}
 
-	for game.IsRunning {
-		if err = game.HandleEvents(); err != nil {
-			panic(err)
-		}
-
-		if err = game.Update(); err != nil {
-			panic(err)
-		}
-
-		if err = game.Draw(); err != nil {
-			panic(err)
-		}
+	if err = game.Renderer.Run(game.Draw, game.Update, 100*16, 30*32, "dngn"); err != nil {
+		panic(err)
 	}
 
 	if *memoryProfile == true {
@@ -62,6 +58,4 @@ func main() {
 
 		defer f.Close()
 	}
-
-	game.Shutdown()
 }

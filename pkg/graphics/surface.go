@@ -2,7 +2,9 @@ package graphics
 
 import (
 	"github.com/christiannicola/dngn/pkg/primitives"
+	"golang.org/x/image/font"
 	"image"
+	"image/color"
 )
 
 type Surface interface {
@@ -10,6 +12,8 @@ type Surface interface {
 	Clear(color Color)
 	DrawRect(width, height int, color Color)
 	DrawLine(x, y int, color Color)
+	DrawText(x, y int, text string, face font.Face, clr color.Color)
+	DrawGlyph(x, y int, glyph rune, face font.Face, clr color.Color)
 	GetSize() (width, height int)
 	GetDepth() int
 	Pop()

@@ -5,6 +5,8 @@ import (
 	"github.com/christiannicola/dngn/pkg/primitives"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/hajimehoshi/ebiten/v2/text"
+	"golang.org/x/image/font"
 	"image"
 	"image/color"
 	"math"
@@ -52,19 +54,19 @@ func (s Surface) Renderer() graphics.Renderer {
 	return s.renderer
 }
 
-func (s Surface) Clear(color graphics.Color) {
+func (s *Surface) Clear(color graphics.Color) {
 	s.image.Fill(color)
 }
 
-func (s Surface) DrawRect(width, height int, color graphics.Color) {
+func (s *Surface) DrawRect(width, height int, color graphics.Color) {
 	ebitenutil.DrawRect(s.image, float64(s.stateCurrent.x), float64(s.stateCurrent.y), float64(width), float64(height), color)
 }
 
-func (s Surface) DrawLine(x, y int, color graphics.Color) {
+func (s *Surface) DrawLine(x, y int, color graphics.Color) {
 	ebitenutil.DrawLine(s.image, float64(s.stateCurrent.x), float64(s.stateCurrent.y), float64(s.stateCurrent.x+x), float64(s.stateCurrent.y+y), color)
 }
 
-func (s Surface) GetSize() (width, height int) {
+func (s *Surface) GetSize() (width, height int) {
 	return s.image.Size()
 }
 
@@ -122,7 +124,7 @@ func (s *Surface) PushSaturation(saturation float64) {
 	s.stateCurrent.saturation += saturation
 }
 
-func (s Surface) Render(surface graphics.Surface) {
+func (s *Surface) Render(surface graphics.Surface) {
 	opts := s.createDrawImageOptions()
 
 	if s.stateCurrent.brightness != 1 || s.stateCurrent.saturation != 1 {
@@ -132,7 +134,7 @@ func (s Surface) Render(surface graphics.Surface) {
 	s.image.DrawImage(surface.(*Surface).image, opts)
 }
 
-func (s Surface) RenderSection(surface graphics.Surface, bound primitives.Rect) {
+func (s *Surface) RenderSection(surface graphics.Surface, bound primitives.Rect) {
 	opts := s.createDrawImageOptions()
 
 	if s.stateCurrent.brightness != 0 {
@@ -142,7 +144,7 @@ func (s Surface) RenderSection(surface graphics.Surface, bound primitives.Rect) 
 	s.image.DrawImage(surface.(*Surface).image.SubImage(image.Rect(bound.TopLeft().X(), bound.TopLeft().Y(), bound.BottomRight().X(), bound.BottomRight().Y())).(*ebiten.Image), opts)
 }
 
-func (s Surface) ReplacePixels(pixels []byte) {
+func (s *Surface) ReplacePixels(pixels []byte) {
 	s.image.ReplacePixels(pixels)
 }
 
@@ -158,6 +160,14 @@ func (s Surface) Screenshot() *image.RGBA {
 	}
 
 	return rgba
+}
+
+func (s *Surface) DrawText(x, y int, message string, face font.Face, clr color.Color) {
+	text.Draw(s.image, message, face, x, y, clr)
+}
+
+func (s *Surface) DrawGlyph(x, y int, glyph rune, face font.Face, clr color.Color) {
+	s.DrawText(x, y, string(glyph), face, clr)
 }
 
 func createSurface(r *Renderer, img *ebiten.Image, currentState ...surfaceState) *Surface {

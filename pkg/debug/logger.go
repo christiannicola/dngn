@@ -34,11 +34,11 @@ const colorEscapeReset = "\033[0m"
 
 const (
 	fmtPrefix     = "[%s]"
-	LogFmtDebug   = "[DEBUG]" + colorEscapeReset + " %s\r\n"
-	LogFmtInfo    = "[INFO ]" + colorEscapeReset + "%s\r\n"
-	LogFmtWarning = "[WARN ]" + colorEscapeReset + "%s\r\n"
-	LogFmtError   = "[ERROR]" + colorEscapeReset + "%s\r\n"
-	LogFmtFatal   = "[FATAL]" + colorEscapeReset + "%s\r\n"
+	LogFmtDebug   = "[DEBUG]" + colorEscapeReset
+	LogFmtInfo    = "[INFO ]" + colorEscapeReset
+	LogFmtWarning = "[WARN ]" + colorEscapeReset
+	LogFmtError   = "[ERROR]" + colorEscapeReset
+	LogFmtFatal   = "[FATAL]" + colorEscapeReset
 )
 
 type Logger struct {
@@ -171,7 +171,7 @@ func (l *Logger) print(level LogLevel, msg string) {
 	}
 
 	if l.prefix != "" {
-		fmtString += fmt.Sprintf(fmtColorEscape, magenta) + fmt.Sprintf(fmtPrefix, l.prefix) + colorEscapeReset + " "
+		fmtString += fmt.Sprintf(fmtColorEscape, magenta) + fmt.Sprintf(fmtPrefix, l.prefix) + colorEscapeReset + " %s\n"
 	}
 
 	_, err := l.Write(l.format(fmtString, []byte(msg)))

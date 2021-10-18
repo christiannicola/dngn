@@ -1,16 +1,20 @@
 package graphics
 
-import "github.com/christiannicola/dngn/pkg/primitives"
+import (
+	"github.com/christiannicola/dngn/pkg/primitives"
+	"golang.org/x/image/font"
+)
 
 type (
 	Terminal struct {
 		display Display
 		bg, fg  Color
+		face    font.Face
 	}
 )
 
-func NewTerminal(width, height int) *Terminal {
-	return &Terminal{NewDisplay(width, height), Black, White}
+func NewTerminal(width, height int, face font.Face) *Terminal {
+	return &Terminal{NewDisplay(width, height), Black, White, face}
 }
 
 func (t Terminal) Width() int {
@@ -76,6 +80,6 @@ func (t *Terminal) WriteText(text *Text) error {
 	return nil
 }
 
-func (t *Terminal) Render(fn DrawGlyphFn) error {
-	return t.display.Render(fn)
+func (t *Terminal) Render(surface Surface) error {
+	return t.display.Render(surface, t.face)
 }
