@@ -18,7 +18,7 @@ export GO111MODULE=on
 
 .PHONY: all
 all: fmt | $(BIN) ; $(info $(M) building release...) @ ## Build release binary
-	$Q CGO_ENABLED=1 CC=gcc GOOS=linux GOARCH=amd64 \
+	$Q CGO_ENABLED=1 CC=gcc \
 		$(GO) build \
 		-ldflags '-X main.Version=$(VERSION) -X main.BuildDate=$(DATE) -s -w' \
 		-o $(BIN)/$(MODULE) ./cmd/$(MODULE)
