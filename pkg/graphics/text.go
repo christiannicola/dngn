@@ -3,6 +3,7 @@ package graphics
 import (
 	"fmt"
 	"github.com/christiannicola/dngn/pkg/primitives"
+	"image/color"
 	"strconv"
 	"strings"
 )
@@ -25,13 +26,13 @@ type (
 		glyphs primitives.Array2D
 		x, y   int
 		pos    TextPosition
-		fg, bg Color
+		fg, bg color.Color
 	}
 
 	TextPosition int
 )
 
-func NewText(text string, fg, bg Color) *Text {
+func NewText(text string, fg, bg color.Color) *Text {
 	lines := strings.Split(text, "\n")
 
 	// NOTE (c.nicola): Calculating the size of the rectangle for the text

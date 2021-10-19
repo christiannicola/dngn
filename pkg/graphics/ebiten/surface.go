@@ -54,15 +54,15 @@ func (s Surface) Renderer() graphics.Renderer {
 	return s.renderer
 }
 
-func (s *Surface) Clear(color graphics.Color) {
+func (s *Surface) Clear(color color.Color) {
 	s.image.Fill(color)
 }
 
-func (s *Surface) DrawRect(width, height int, color graphics.Color) {
+func (s *Surface) DrawRect(width, height int, color color.Color) {
 	ebitenutil.DrawRect(s.image, float64(s.stateCurrent.x), float64(s.stateCurrent.y), float64(width), float64(height), color)
 }
 
-func (s *Surface) DrawLine(x, y int, color graphics.Color) {
+func (s *Surface) DrawLine(x, y int, color color.Color) {
 	ebitenutil.DrawLine(s.image, float64(s.stateCurrent.x), float64(s.stateCurrent.y), float64(s.stateCurrent.x+x), float64(s.stateCurrent.y+y), color)
 }
 
@@ -91,7 +91,7 @@ func (s *Surface) PopN(n int) {
 	}
 }
 
-func (s *Surface) PushColor(color graphics.Color) {
+func (s *Surface) PushColor(color color.Color) {
 	s.stateStack = append(s.stateStack, s.stateCurrent)
 	s.stateCurrent.color = color
 }
@@ -175,7 +175,7 @@ func createSurface(r *Renderer, img *ebiten.Image, currentState ...surfaceState)
 		x:          0,
 		y:          0,
 		filter:     0,
-		color:      graphics.Color{},
+		color:      graphics.White,
 		brightness: defaultBrightness,
 		saturation: defaultSaturation,
 		skewX:      defaultSkewX,
@@ -224,7 +224,6 @@ func (s *Surface) now() int64 {
 }
 
 func (s *Surface) colorToColorM(clr color.Color) ebiten.ColorM {
-	// RGBA() is in [0 - 0xffff]. Adjust them in [0 - 0xff].
 	cr, cg, cb, ca := clr.RGBA()
 	cr >>= 8
 	cg >>= 8

@@ -3,12 +3,13 @@ package graphics
 import (
 	"github.com/christiannicola/dngn/pkg/primitives"
 	"golang.org/x/image/font"
+	"image/color"
 )
 
 type (
 	Terminal struct {
 		display Display
-		bg, fg  Color
+		bg, fg  color.Color
 		face    font.Face
 	}
 )
@@ -29,7 +30,7 @@ func (t Terminal) Size() primitives.Vector {
 	return t.display.Size()
 }
 
-func (t *Terminal) Fill(x, y, width, height int, color Color) error {
+func (t *Terminal) Fill(x, y, width, height int, color color.Color) error {
 	glyph := NewGlyphFromCharCode(Space, t.fg, color)
 
 	for iy := y; iy < y+height; iy++ {
@@ -43,11 +44,11 @@ func (t *Terminal) Fill(x, y, width, height int, color Color) error {
 	return nil
 }
 
-func (t *Terminal) WriteChar(x, y int, c CharCode, fg, bg Color) error {
+func (t *Terminal) WriteChar(x, y int, c CharCode, fg, bg color.Color) error {
 	return t.display.SetGlyph(x, y, Glyph{c, fg, bg})
 }
 
-func (t *Terminal) WriteString(x, y int, text string, fg, bg Color) error {
+func (t *Terminal) WriteString(x, y int, text string, fg, bg color.Color) error {
 	runes := []rune(text)
 
 	for i := range runes {
