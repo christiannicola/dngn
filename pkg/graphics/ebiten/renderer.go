@@ -56,8 +56,9 @@ func (r *Renderer) Draw(screen *ebiten.Image) {
 	r.lastError = r.RenderCallback(createSurface(r, screen))
 }
 
-func (r *Renderer) Layout(_, _ int) (width, height int) {
-	return screenWidth, screenHeight
+func (r *Renderer) Layout(outsideWidth, outsideHeight int) (int, int) {
+	s := ebiten.DeviceScaleFactor()
+	return int(float64(outsideWidth) * s), int(float64(outsideHeight) * s)
 }
 
 func (r *Renderer) GetRendererName() string {
