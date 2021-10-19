@@ -2,132 +2,123 @@ package graphics
 
 import (
 	"github.com/christiannicola/dngn/pkg/math"
+	"image/color"
 )
 
 var (
-	Black = Color{0, 0, 0}
-	White = Color{255, 255, 255}
+	Black = color.RGBA{A: 0xff}
+	White = color.RGBA{R: 0xff, G: 0xff, B: 0xff, A: 0xff}
 
-	LightGray = Color{192, 192, 192}
-	Gray      = Color{128, 128, 128}
-	DarkGray  = Color{64, 64, 64}
+	LightGray = color.RGBA{R: 0xc0, G: 0xc0, B: 0xc0, A: 0xff}
+	Gray      = color.RGBA{R: 0x80, G: 0x80, B: 0x80, A: 0xff}
+	DarkGray  = color.RGBA{R: 0x40, G: 0x40, B: 0x40, A: 0xff}
 
-	LightRed = Color{255, 160, 160}
-	Red      = Color{220, 0, 0}
-	DarkRed  = Color{100, 0, 0}
+	LightRed = color.RGBA{R: 0xff, G: 0xa0, B: 0xa0, A: 0xff}
+	Red      = color.RGBA{R: 0xdc, A: 0xff}
+	DarkRed  = color.RGBA{R: 0x64, A: 0xff}
 
-	LightOrange = Color{255, 200, 170}
-	Orange      = Color{255, 128, 0}
-	DarkOrange  = Color{128, 64, 0}
+	LightOrange = color.RGBA{R: 0xff, G: 0xc8, B: 0xaa, A: 0xff}
+	Orange      = color.RGBA{R: 0xff, G: 0x80, A: 0xff}
+	DarkOrange  = color.RGBA{R: 0x80, G: 0x40, A: 0xff}
 
-	LightGold = Color{255, 230, 150}
-	Gold      = Color{255, 192, 0}
-	DarkGold  = Color{128, 96, 0}
+	LightGold = color.RGBA{R: 0xff, G: 0xe6, B: 0x96, A: 0xff}
+	Gold      = color.RGBA{R: 0xff, G: 0xc0, A: 0xff}
+	DarkGold  = color.RGBA{R: 0x80, G: 0x60, A: 0xff}
 
-	LightYellow = Color{255, 255, 150}
-	Yellow      = Color{255, 255, 0}
-	DarkYellow  = Color{128, 128, 0}
+	LightYellow = color.RGBA{R: 0xff, G: 0xff, B: 0x96, A: 0xff}
+	Yellow      = color.RGBA{R: 0xff, G: 0xff, A: 0xff}
+	DarkYellow  = color.RGBA{R: 0x80, G: 0x80, A: 0xff}
 
-	LightGreen = Color{130, 255, 90}
-	Green      = Color{0, 128, 0}
-	DarkGreen  = Color{0, 64, 0}
+	LightGreen = color.RGBA{R: 0x82, G: 0xff, B: 0x5a, A: 0xff}
+	Green      = color.RGBA{G: 0x80, A: 0xff}
+	DarkGreen  = color.RGBA{G: 0x40, A: 0xff}
 
-	LightAqua = Color{128, 255, 255}
-	Aqua      = Color{0, 255, 255}
-	DarkAqua  = Color{0, 128, 128}
+	LightAqua = color.RGBA{R: 0x80, G: 0xff, B: 0xff, A: 0xff}
+	Aqua      = color.RGBA{G: 0xff, B: 0xff, A: 0xff}
+	DarkAqua  = color.RGBA{G: 0x80, B: 0x80, A: 0xff}
 
-	LightBlue = Color{128, 160, 255}
-	Blue      = Color{0, 64, 255}
-	DarkBlue  = Color{0, 37, 168}
+	LightBlue = color.RGBA{R: 0x80, G: 0xa0, B: 0xff, A: 0xff}
+	Blue      = color.RGBA{G: 0x40, B: 0xff, A: 0xff}
+	DarkBlue  = color.RGBA{G: 0x25, B: 0xa8, A: 0xff}
 
-	LightPurple = Color{200, 140, 255}
-	Purple      = Color{128, 0, 255}
-	DarkPurple  = Color{64, 0, 128}
+	LightPurple = color.RGBA{R: 0xc8, G: 0x8c, B: 0xff, A: 0xff}
+	Purple      = color.RGBA{R: 0x80, B: 0xff, A: 0xff}
+	DarkPurple  = color.RGBA{R: 0x40, B: 0x80, A: 0xff}
 
-	LightBrown = Color{190, 150, 100}
-	Brown      = Color{160, 110, 60}
-	DarkBrown  = Color{100, 64, 32}
+	LightBrown = color.RGBA{R: 0xbe, G: 0x96, B: 0x64, A: 0xff}
+	Brown      = color.RGBA{R: 0xa0, G: 0x6e, B: 0x3c, A: 0xff}
+	DarkBrown  = color.RGBA{R: 0x64, G: 0x40, B: 0x20, A: 0xff}
 
-	Ash            = Color{0xe2, 0xdf, 0xf0}
-	LightCoolGray  = Color{0x74, 0x92, 0xb5}
-	CoolGray       = Color{0x3f, 0x4b, 0x73}
-	DarkCoolGray   = Color{0x26, 0x2a, 0x42}
-	DarkerCoolGray = Color{0x14, 0x13, 0x1f}
+	Ash            = color.RGBA{R: 0xe2, G: 0xdf, B: 0xf0, A: 0xff}
+	LightCoolGray  = color.RGBA{R: 0x74, G: 0x92, B: 0xb5, A: 0xff}
+	CoolGray       = color.RGBA{R: 0x3f, G: 0x4b, B: 0x73, A: 0xff}
+	DarkCoolGray   = color.RGBA{R: 0x26, G: 0x2a, B: 0x42, A: 0xff}
+	DarkerCoolGray = color.RGBA{R: 0x14, G: 0x13, B: 0x1f, A: 0xff}
 
-	LightWarmGray  = Color{0x84, 0x7e, 0x87}
-	WarmGray       = Color{0x48, 0x40, 0x4a}
-	DarkWarmGray   = Color{0x2a, 0x24, 0x2b}
-	DarkerWarmGray = Color{0x16, 0x11, 0x17}
+	LightWarmGray  = color.RGBA{R: 0x84, G: 0x7e, B: 0x87, A: 0xff}
+	WarmGray       = color.RGBA{R: 0x48, G: 0x40, B: 0x4a, A: 0xff}
+	DarkWarmGray   = color.RGBA{R: 0x2a, G: 0x24, B: 0x2b, A: 0xff}
+	DarkerWarmGray = color.RGBA{R: 0x16, G: 0x11, B: 0x17, A: 0xff}
 
-	Sandal = Color{0xbd, 0x90, 0x6c}
-	Tan    = Color{0x8e, 0x52, 0x37}
+	Sandal = color.RGBA{R: 0xbd, G: 0x90, B: 0x6c, A: 0xff}
+	Tan    = color.RGBA{R: 0x8e, G: 0x52, B: 0x37, A: 0xff}
 
-	Carrot    = Color{0xb3, 0x4a, 0x04}
-	Persimmon = Color{0x6e, 0x20, 0x0d}
+	Carrot    = color.RGBA{R: 0xb3, G: 0x4a, B: 0x04, A: 0xff}
+	Persimmon = color.RGBA{R: 0x6e, G: 0x20, B: 0x0d, A: 0xff}
 
-	Buttermilk = Color{0xff, 0xee, 0xa8}
-	Olive      = Color{0x63, 0x57, 0x07}
-	DarkOlive  = Color{0x33, 0x30, 0x1c}
+	Buttermilk = color.RGBA{R: 0xff, G: 0xee, B: 0xa8, A: 0xff}
+	Olive      = color.RGBA{R: 0x63, G: 0x57, B: 0x07, A: 0xff}
+	DarkOlive  = color.RGBA{R: 0x33, G: 0x30, B: 0x1c, A: 0xff}
 
-	Mint     = Color{0x81, 0xd9, 0x75}
-	Lima     = Color{0x83, 0x9e, 0x0d}
-	PeaGreen = Color{0x16, 0x75, 0x26}
-	Sherwood = Color{0x00, 0x40, 0x27}
+	Mint     = color.RGBA{R: 0x81, G: 0xd9, B: 0x75, A: 0xff}
+	Lima     = color.RGBA{R: 0x83, G: 0x9e, B: 0x0d, A: 0xff}
+	PeaGreen = color.RGBA{R: 0x16, G: 0x75, B: 0x26, A: 0xff}
+	Sherwood = color.RGBA{G: 0x40, B: 0x27, A: 0xff}
 
-	Lavender = Color{0xc9, 0xa6, 0xff}
-	Lilac    = Color{0xad, 0x58, 0xdb}
-	Violet   = Color{0x38, 0x10, 0x7d}
+	Lavender = color.RGBA{R: 0xc9, G: 0xa6, B: 0xff, A: 0xff}
+	Lilac    = color.RGBA{R: 0xad, G: 0x58, B: 0xdb, A: 0xff}
+	Violet   = color.RGBA{R: 0x38, G: 0x10, B: 0x7d, A: 0xff}
 
-	Pink   = Color{0xff, 0x7a, 0x69}
-	Maroon = Color{0x54, 0x00, 0x27}
+	Pink   = color.RGBA{R: 0xff, G: 0x7a, B: 0x69, A: 0xff}
+	Maroon = color.RGBA{R: 0x54, B: 0x27, A: 0xff}
 )
 
-type Color struct {
-	r, g, b int
+func NewColor(r, g, b uint8) color.Color {
+	return color.RGBA{r, g, b, 0xff}
 }
 
-func NewColor(r, g, b int) Color {
-	return Color{r, g, b}
-}
+func AddColors(first, other color.Color, fraction float32) color.Color {
+	r1, g1, b1, _ := first.RGBA()
+	r2, g2, b2, _ := other.RGBA()
 
-func (c Color) Add(other Color, fraction float32) Color {
-	return Color{
-		math.Clamp(int(float32(c.r)+float32(other.r)*fraction), 0, 255),
-		math.Clamp(int(float32(c.g)+float32(other.g)*fraction), 0, 255),
-		math.Clamp(int(float32(c.b)+float32(other.b)*fraction), 0, 255),
+	return color.RGBA{
+		R: math.ClampUint8(uint8(float32(r1)+float32(r2)*fraction), 0x00, 0xff),
+		G: math.ClampUint8(uint8(float32(g1)+float32(g2)*fraction), 0x00, 0xff),
+		B: math.ClampUint8(uint8(float32(b1)+float32(b2)*fraction), 0x00, 0xff),
+		A: 0xff,
 	}
 }
 
-func (c Color) Blend(other Color, otherFraction float32) Color {
+func BlendColors(first, other color.Color, otherFraction float32) color.Color {
+	r1, g1, b1, _ := first.RGBA()
+	r2, g2, b2, _ := other.RGBA()
 	thisFraction := 1.0 - otherFraction
 
-	return Color{
-		math.Clamp(int(float32(c.r)*thisFraction+float32(other.r)*otherFraction), 0, 255),
-		math.Clamp(int(float32(c.g)*thisFraction+float32(other.g)*otherFraction), 0, 255),
-		math.Clamp(int(float32(c.b)*thisFraction+float32(other.b)*otherFraction), 0, 255),
+	return color.RGBA{
+		R: math.ClampUint8(uint8(float32(r1)*thisFraction+float32(r2)*otherFraction), 0x00, 0xff),
+		G: math.ClampUint8(uint8(float32(g1)*thisFraction+float32(g2)*otherFraction), 0x00, 0xff),
+		B: math.ClampUint8(uint8(float32(b1)*thisFraction+float32(b2)*otherFraction), 0x00, 0xff),
+		A: 0xff,
 	}
 }
 
-func (c Color) BlendPercent(other Color, percent int) Color {
-	return c.Blend(other, float32(percent/100))
+func BlendColorsPercent(first, other color.Color, percent int) color.Color {
+	return BlendColors(first, other, float32(percent/100))
 }
 
-func (c Color) Equal(other Color) bool {
-	return c.r == other.r && c.g == other.g && c.b == other.b
-}
+func AreColorsEqual(first, other color.Color) bool {
+	r1, g1, b1, a1 := first.RGBA()
+	r2, g2, b2, a2 := other.RGBA()
 
-func (c Color) R() int {
-	return c.r
-}
-
-func (c Color) G() int {
-	return c.g
-}
-
-func (c Color) B() int {
-	return c.b
-}
-
-func (c Color) RGBA() (r, g, b, a uint32) {
-	return uint32(c.R()), uint32(c.G()), uint32(c.B()), 0
+	return r1 == r2 && g1 == g2 && b1 == b2 && a1 == a2
 }
