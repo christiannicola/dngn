@@ -2,7 +2,6 @@ package ebiten
 
 import (
 	"github.com/christiannicola/dngn/pkg/graphics"
-	"github.com/christiannicola/dngn/pkg/primitives"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/text"
@@ -134,14 +133,14 @@ func (s *Surface) Render(surface graphics.Surface) {
 	s.image.DrawImage(surface.(*Surface).image, opts)
 }
 
-func (s *Surface) RenderSection(surface graphics.Surface, bound primitives.Rect) {
+func (s *Surface) RenderSection(surface graphics.Surface, bound image.Rectangle) {
 	opts := s.createDrawImageOptions()
 
 	if s.stateCurrent.brightness != 0 {
 		opts.ColorM.ChangeHSV(0, s.stateCurrent.saturation, s.stateCurrent.brightness)
 	}
 
-	s.image.DrawImage(surface.(*Surface).image.SubImage(image.Rect(bound.TopLeft().X(), bound.TopLeft().Y(), bound.BottomRight().X(), bound.BottomRight().Y())).(*ebiten.Image), opts)
+	s.image.DrawImage(surface.(*Surface).image.SubImage(bound).(*ebiten.Image), opts)
 }
 
 func (s *Surface) ReplacePixels(pixels []byte) {

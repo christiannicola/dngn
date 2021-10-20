@@ -1,7 +1,6 @@
 package graphics
 
 import (
-	"github.com/christiannicola/dngn/pkg/primitives"
 	"golang.org/x/image/font"
 	"image"
 	"image/color"
@@ -25,7 +24,7 @@ type Surface interface {
 	PushBrightness(brightness float64)
 	PushSaturation(saturation float64)
 	Render(surface Surface)
-	RenderSection(surface Surface, bound primitives.Rect)
+	RenderSection(surface Surface, bound image.Rectangle)
 	ReplacePixels(pixels []byte)
 	Screenshot() *image.RGBA
 }

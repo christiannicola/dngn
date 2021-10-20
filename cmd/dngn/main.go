@@ -14,8 +14,6 @@ var (
 )
 
 func main() {
-	const width, height = 100, 30
-
 	flag.Parse()
 
 	if *cpuProfile == true {
@@ -37,12 +35,12 @@ func main() {
 
 	l.Debug("constructing game")
 
-	game, err := internal.NewGame(width, height, "dngn")
+	game, err := internal.NewGame("dngn")
 	if err != nil {
 		panic(err)
 	}
 
-	if err = game.Renderer.Run(game.Draw, game.Update, 100*16, 30*32, "dngn"); err != nil {
+	if err = game.Renderer.Run(game.Draw, game.Update, 1024, 768, "dngn"); err != nil {
 		panic(err)
 	}
 
